@@ -29,3 +29,29 @@ class CourierMethods:
             login_pass.append(first_name)
 
         return login_pass
+
+    @allure.step("Логин курьера в системе")
+    def login_courier(self):
+        login_pass = self.register_new_courier_and_return_login_password()
+        login = login_pass[0]
+        password = login_pass[1]
+
+        payload = {
+            "login": login,
+            "password": password
+        }
+
+        response = requests.post(f'{BASE_URL}{LOGIN_COURIER}', data=payload)
+
+        return response.json()
+
+    @allure.step("Удаление курьера")
+    def delete_courier(self):
+        login_pass = self.login_courier()
+        courier_id = login_pass.get('id')
+        response = requests.delete(f'{BASE_URL}{COURIERS_URL}/:{courier_id}')
+
+        if response.status_code == 200:
+            return response.json()
+        else:
+            return "Что-то пошло не так, мы не смогли удалить курьера"

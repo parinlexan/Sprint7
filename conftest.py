@@ -7,3 +7,4 @@ def create_courier():
     courier = CourierMethods()
     courier_data = courier.register_new_courier_and_return_login_password()
     yield courier_data
+    courier.delete_courier()
