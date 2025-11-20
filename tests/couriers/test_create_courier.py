@@ -11,11 +11,15 @@ class TestCreateCourier:
 
     @allure.title("/api/v1/courier -> 200 OK: все поля заполнены")
     @allure.description("Успешное создание курьера со всеми заполненными полями")
-    def test_create_courier(self):
+    def test_create_courier(self, delete_courier):
+        login = generate_random_string(10)
+        password = generate_random_string(10)
+        first_name = generate_random_string(10)
+
         payload = {
-            "login": generate_random_string(10),
-            "password": generate_random_string(10),
-            "firstName": generate_random_string(10),
+            "login": login,
+            "password": password,
+            "firstName": first_name,
         }
         response = requests.post(f"{BASE_URL}{COURIERS_URL}", json=payload)
 
@@ -23,10 +27,13 @@ class TestCreateCourier:
 
     @allure.title("/api/v1/courier -> 200 OK: firstName = null")
     @allure.description("Успешное создание курьера без firstName (со всеми обязательными полями)")
-    def test_create_courier_no_name(self):
+    def test_create_courier_no_name(self, delete_courier):
+        login = generate_random_string(10)
+        password = generate_random_string(10)
+
         payload = {
-            "login": generate_random_string(10),
-            "password": generate_random_string(10),
+            "login": login,
+            "password": password,
         }
         response = requests.post(f"{BASE_URL}{COURIERS_URL}", json=payload)
 
@@ -64,11 +71,11 @@ class TestCreateCourier:
 
     @allure.title("/api/v1/courier -> 409 conflict: создаем курьера дважды")
     @allure.description("Ошибка при создании уже существующего в системе курьера")
-    def test_no_password(self, create_courier):
+    def test_no_password(self, create_delete_courier):
         payload = {
-            "firstName": create_courier[2],
-            "password": create_courier[1],
-            "login": create_courier[0],
+            "firstName": create_delete_courier[2],
+            "password": create_delete_courier[1],
+            "login": create_delete_courier[0],
         }
         response = requests.post(f"{BASE_URL}{COURIERS_URL}", json=payload)
 

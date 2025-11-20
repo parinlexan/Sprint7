@@ -32,9 +32,7 @@ class CourierMethods:
 
     @allure.step("Логин курьера в системе")
     def login_courier(self):
-        login_pass = self.register_new_courier_and_return_login_password()
-        login = login_pass[0]
-        password = login_pass[1]
+        login, password = get_login()
 
         payload = {
             "login": login,
