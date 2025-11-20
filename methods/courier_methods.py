@@ -52,4 +52,4 @@ class CourierMethods:
         if response.status_code == 200:
             return response.json()
         else:
-            return "Что-то пошло не так, мы не смогли удалить курьера"
+            return {"status_code": response.status_code, "message": response.text}
